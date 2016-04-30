@@ -8,7 +8,7 @@ require({
 		'Cesium/Core/CesiumTerrainProvider',
 		'Cesium/Core/ClockRange',
 		'Cesium/Core/defined',
-		'Cesium/Core/JulianDate'
+		'Cesium/Core/JulianDate',
 		'Cesium/DataSources/DataSourceCollection',
 		'Cesium/DataSources/KmlDataSource',
 		'Cesium/Widgets/Viewer/Viewer',
