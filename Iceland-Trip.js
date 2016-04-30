@@ -8,17 +8,16 @@ require({
 		'Cesium/Core/CesiumTerrainProvider',
 		'Cesium/Core/ClockRange',
 		'Cesium/Core/defined',
-		'Cesium/DataSources/kmlDataSource',
+		'Cesium/DataSources/KmlDataSource',
 		'Cesium/Widgets/Viewer/Viewer',
 		'domReady!'
 	], function (
 		CesiumTerrainProvider,
 		ClockRange,
 		defined,
-		kmlDataSource,
-		SceneMode,
-		when,
-		Viewer) {
+		KmlDataSource,
+		Viewer
+		when) {
 	'use strict';
 
 	var loadingIndicator = document.getElementById('loadingIndicator');
