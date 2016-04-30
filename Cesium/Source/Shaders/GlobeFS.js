@@ -1,6 +1,6 @@
-//This file is automatically rebuilt by the Cesium build process.
-/*global define*/
-define(function() {
+    //This file is automatically rebuilt by the Cesium build process.
+    /*global define*/
+    define(function() {
     "use strict";
     return "//#define SHOW_TILE_BOUNDARIES\n\
 \n\
@@ -56,12 +56,6 @@ varying vec3 v_positionEC;\n\
 varying vec2 v_textureCoordinates;\n\
 varying vec3 v_normalMC;\n\
 varying vec3 v_normalEC;\n\
-\n\
-#ifdef FOG\n\
-varying float v_distance;\n\
-varying vec3 v_rayleighColor;\n\
-varying vec3 v_mieColor;\n\
-#endif\n\
 \n\
 vec4 sampleAndBlend(\n\
     vec4 previousColor,\n\
@@ -168,7 +162,7 @@ void main()\n\
 \n\
 #ifdef ENABLE_VERTEX_LIGHTING\n\
     float diffuseIntensity = clamp(czm_getLambertDiffuse(czm_sunDirectionEC, normalize(v_normalEC)) * 0.9 + 0.3, 0.0, 1.0);\n\
-    vec4 finalColor = vec4(color.rgb * diffuseIntensity, color.a);\n\
+    gl_FragColor = vec4(color.rgb * diffuseIntensity, color.a);\n\
 #elif defined(ENABLE_DAYNIGHT_SHADING)\n\
     float diffuseIntensity = clamp(czm_getLambertDiffuse(czm_sunDirectionEC, normalEC) * 5.0 + 0.3, 0.0, 1.0);\n\
     float cameraDist = length(czm_view[3]);\n\
@@ -176,20 +170,9 @@ void main()\n\
     float fadeInDist = u_lightingFadeDistance.y;\n\
     float t = clamp((cameraDist - fadeOutDist) / (fadeInDist - fadeOutDist), 0.0, 1.0);\n\
     diffuseIntensity = mix(1.0, diffuseIntensity, t);\n\
-    vec4 finalColor = vec4(color.rgb * diffuseIntensity, color.a);\n\
+    gl_FragColor = vec4(color.rgb * diffuseIntensity, color.a);\n\
 #else\n\
-    vec4 finalColor = color;\n\
-#endif\n\
-\n\
-\n\
-#ifdef FOG\n\
-    const float fExposure = 2.0;\n\
-    vec3 fogColor = v_mieColor + finalColor.rgb * v_rayleighColor;\n\
-    fogColor = vec3(1.0) - exp(-fExposure * fogColor);\n\
-    \n\
-    gl_FragColor = vec4(czm_fog(v_distance, finalColor.rgb, fogColor), finalColor.a);\n\
-#else\n\
-    gl_FragColor = finalColor;\n\
+    gl_FragColor = color;\n\
 #endif\n\
 }\n\
 \n\

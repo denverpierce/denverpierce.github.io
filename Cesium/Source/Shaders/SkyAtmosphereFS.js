@@ -29,9 +29,9 @@
  *
  * Modifications made by Analytical Graphics, Inc.
  */
-//This file is automatically rebuilt by the Cesium build process.
-/*global define*/
-define(function() {
+    //This file is automatically rebuilt by the Cesium build process.
+    /*global define*/
+    define(function() {
     "use strict";
     return "/**\n\
  * @license\n\
@@ -71,6 +71,9 @@ define(function() {
 const float g = -0.95;\n\
 const float g2 = g * g;\n\
 \n\
+uniform float fCameraHeight;\n\
+uniform float fInnerRadius;\n\
+\n\
 varying vec3 v_rayleighColor;\n\
 varying vec3 v_mieColor;\n\
 varying vec3 v_toCamera;\n\
@@ -78,10 +81,47 @@ varying vec3 v_positionEC;\n\
 \n\
 void main (void)\n\
 {\n\
+    // TODO: make arbitrary ellipsoid\n\
+    czm_ellipsoid ellipsoid = czm_getWgs84EllipsoidEC();\n\
+    \n\
+    vec3 direction = normalize(v_positionEC);\n\
+    czm_ray ray = czm_ray(vec3(0.0), direction);\n\
+    \n\
+    if (fCameraHeight > fInnerRadius) {\n\
+	    czm_raySegment intersection = czm_rayEllipsoidIntersectionInterval(ray, ellipsoid);\n\
+	    if (!czm_isEmpty(intersection)) {\n\
+	        discard;\n\
+	    }\n\
+	} else {\n\
+	    // The ellipsoid test above will discard fragments when the ray origin is\n\
+	    // inside the ellipsoid.\n\
+	    vec3 radii = ellipsoid.radii;\n\
+	    float maxRadius = max(radii.x, max(radii.y, radii.z));\n\
+	    vec3 ellipsoidCenter = czm_modelView[3].xyz;\n\
+	    \n\
+	    float t1 = -1.0;\n\
+	    float t2 = -1.0;\n\
+	    \n\
+	    float b = -2.0 * dot(direction, ellipsoidCenter);\n\
+	    float c = dot(ellipsoidCenter, ellipsoidCenter) - maxRadius * maxRadius;\n\
+	\n\
+	    float discriminant = b * b - 4.0 * c;\n\
+	    if (discriminant >= 0.0) {\n\
+	        t1 = (-b - sqrt(discriminant)) * 0.5;\n\
+	        t2 = (-b + sqrt(discriminant)) * 0.5;\n\
+	    }\n\
+	    \n\
+	    if (t1 < 0.0 && t2 < 0.0) {\n\
+	        // The ray through the fragment intersected the sphere approximating\n\
+	        // the ellipsoid behind the ray origin.\n\
+	        discard;\n\
+	    }\n\
+    }\n\
+    \n\
     // Extra normalize added for Android\n\
     float fCos = dot(czm_sunDirectionWC, normalize(v_toCamera)) / length(v_toCamera);\n\
-    float fRayleighPhase = 0.75 * (1.0 + fCos * fCos);\n\
-    float fMiePhase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + fCos * fCos) / pow(1.0 + g2 - 2.0 * g * fCos, 1.5);\n\
+    float fRayleighPhase = 0.75 * (1.0 + fCos*fCos);\n\
+    float fMiePhase = 1.5 * ((1.0 - g2) / (2.0 + g2)) * (1.0 + fCos*fCos) / pow(1.0 + g2 - 2.0*g*fCos, 1.5);\n\
     \n\
     const float fExposure = 2.0;\n\
     \n\

@@ -19,7 +19,7 @@ require({
 		SceneMode,
 		when,
 		Viewer) {
-	"use strict";
+	'use strict';
 
 	var loadingIndicator = document.getElementById('loadingIndicator');
 
@@ -37,14 +37,9 @@ require({
 			targetFrameRate : 50,
 			dataSources
 		});
-	// Click the VR button in the bottom right of the screen to switch to VR mode.
 
 	viewer.scene.globe.enableLighting = true;
-
 	viewer.scene.globe.depthTestAgainstTerrain = true;
-
-	// Follow the path of a plane. See the interpolation Sandcastle example.
-	CesiumMath.setRandomNumberSeed(3);
 
 	var start = JulianDate.fromIso8601('2016-06-30');
 	var stop = JulianDate.fromIso8601('2016-07-11');
@@ -54,7 +49,6 @@ require({
 	viewer.clock.currentTime = start.clone();
 	viewer.clock.clockRange = ClockRange.LOOP_STOP;
 	viewer.clock.multiplier = 100000;
-
 
 	loadingIndicator.style.display = 'none';
 });
