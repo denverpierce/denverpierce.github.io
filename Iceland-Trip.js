@@ -24,8 +24,10 @@ require({
 
 	var loadingIndicator = document.getElementById('loadingIndicator');
 	
-	var theGoods = new KmlDataSource.load('thegoods.kmz');
-	var collection = new DataSourceCollection.add(theGoods);
+	var theGoods = new KmlDataSource();
+	//var theGoods = new KmlDataSource.load('thegoods.kmz');
+	var collection = new DataSourceCollection();
+	collection.add(theGoods);
 
 	var viewer = new Viewer('cesiumContainer', {
 			baseLayerPicker : false,
