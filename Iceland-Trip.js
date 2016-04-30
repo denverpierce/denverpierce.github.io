@@ -8,7 +8,7 @@ require({
 		'Cesium/Core/CesiumTerrainProvider',
 		'Cesium/Core/ClockRange',
 		'Cesium/Core/defined',
-		'Cesium/DataSources/DataSourceCollection'
+		'Cesium/DataSources/DataSourceCollection',
 		'Cesium/DataSources/KmlDataSource',
 		'Cesium/Widgets/Viewer/Viewer',
 		'domReady!'
