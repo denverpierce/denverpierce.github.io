@@ -8,6 +8,7 @@ require({
 		'Cesium/Core/CesiumTerrainProvider',
 		'Cesium/Core/ClockRange',
 		'Cesium/Core/defined',
+		'Cesium/DataSources/DataSourceCollection'
 		'Cesium/DataSources/KmlDataSource',
 		'Cesium/Widgets/Viewer/Viewer',
 		'domReady!'
@@ -15,12 +16,16 @@ require({
 		CesiumTerrainProvider,
 		ClockRange,
 		defined,
+		DataSourceCollection,
 		KmlDataSource,
 		Viewer,
 		when) {
 	'use strict';
 
 	var loadingIndicator = document.getElementById('loadingIndicator');
+	
+	var theGoods = new KmlDataSource.load('thegoods.kmz');
+	var collection = new DataSourceCollection.add(theGoods);
 
 	var viewer = new Viewer('cesiumContainer', {
 			baseLayerPicker : false,
@@ -34,7 +39,7 @@ require({
 			}),
 			terrainProviderViewModels : [],
 			targetFrameRate : 50,
-			dataSources
+			dataSource: collection
 		});
 
 	viewer.scene.globe.enableLighting = true;
