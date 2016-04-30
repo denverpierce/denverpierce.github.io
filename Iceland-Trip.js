@@ -16,7 +16,7 @@ require({
 		ClockRange,
 		defined,
 		KmlDataSource,
-		Viewer
+		Viewer,
 		when) {
 	'use strict';
 
