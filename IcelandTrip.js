@@ -41,12 +41,7 @@ define([
         viewerDragDropMixin) {
     'use strict';
 
-    //var endUserOptions = queryToObject(window.location.search.substring(1));
-
-    var theGoods = new KmlDataSource();
-    //var theGoods = new KmlDataSource.load('thegoods.kmz');
-    var collection = new DataSourceCollection();
-    collection.add(theGoods);
+    var endUserOptions = queryToObject(window.location.search.substring(1));
 
     var loadingIndicator = document.getElementById('loadingIndicator');
     var viewer;
@@ -60,9 +55,15 @@ define([
                 requestVertexNormals: true
             }),
             terrainProviderViewModels: [],
-            targetFrameRate: 50,
-            dataSource: collection
+            targetFrameRate: 50
         });
+        if (defined(endUserOptions.kml)) {
+            viewer.dataSources.add(KmlDataSource.load('Trip.kml'),
+                 {
+                     camera: viewer.scene.camera,
+                     canvas: viewer.scene.canvas
+                 });
+        }
     } catch (exception) {
         loadingIndicator.style.display = 'none';
         var message = formatError(exception);
@@ -73,9 +74,11 @@ define([
         return;
     }
 
+
+
     viewer.extend(viewerDragDropMixin);
     var initialPosition = new Cartesian3(2860851.3460549247, -978123.2836973182, 6421216.013055526);
-    viewer.camera.setView({destination:initialPosition});
+    viewer.camera.setView({ destination: initialPosition });
 
     viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (commandInfo) {
         //Zoom to custom extent

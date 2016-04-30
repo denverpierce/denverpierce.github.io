@@ -31,6 +31,7 @@ define([
         '../Core/Spherical',
         '../Core/TimeInterval',
         '../Core/TimeIntervalCollection',
+        '../Scene/HeightReference',
         '../Scene/HorizontalOrigin',
         '../Scene/LabelStyle',
         '../Scene/VerticalOrigin',
@@ -56,7 +57,6 @@ define([
         './PathGraphics',
         './PointGraphics',
         './PolygonGraphics',
-        './PolylineArrowMaterialProperty',
         './PolylineGlowMaterialProperty',
         './PolylineGraphics',
         './PolylineOutlineMaterialProperty',
@@ -104,6 +104,7 @@ define([
         Spherical,
         TimeInterval,
         TimeIntervalCollection,
+        HeightReference,
         HorizontalOrigin,
         LabelStyle,
         VerticalOrigin,
@@ -129,7 +130,6 @@ define([
         PathGraphics,
         PointGraphics,
         PolygonGraphics,
-        PolylineArrowMaterialProperty,
         PolylineGlowMaterialProperty,
         PolylineGraphics,
         PolylineOutlineMaterialProperty,
@@ -350,6 +350,8 @@ define([
             return StripeOrientation[defaultValue(czmlInterval.stripeOrientation, czmlInterval)];
         case HorizontalOrigin:
             return HorizontalOrigin[defaultValue(czmlInterval.horizontalOrigin, czmlInterval)];
+        case HeightReference:
+            return HeightReference[defaultValue(czmlInterval.heightReference, czmlInterval)];
         case Image:
             return unwrapUriInterval(czmlInterval, sourceUri);
         case JulianDate:
@@ -831,12 +833,6 @@ define([
             materialData = packetData.polylineGlow;
             processPacketData(Color, existingMaterial, 'color', materialData.color, undefined, sourceUri, entityCollection);
             processPacketData(Number, existingMaterial, 'glowPower', materialData.glowPower, undefined, sourceUri, entityCollection);
-        } else if (defined(packetData.polylineArrow)) {
-            if (!(existingMaterial instanceof PolylineArrowMaterialProperty)) {
-                existingMaterial = new PolylineArrowMaterialProperty();
-            }
-            materialData = packetData.polylineArrow;
-            processPacketData(Color, existingMaterial, 'color', materialData.color, undefined, undefined, entityCollection);
         }
 
         if (defined(existingInterval)) {
@@ -1014,6 +1010,7 @@ define([
 
         processPacketData(Color, billboard, 'color', billboardData.color, interval, sourceUri, entityCollection);
         processPacketData(Cartesian3, billboard, 'eyeOffset', billboardData.eyeOffset, interval, sourceUri, entityCollection);
+        processPacketData(HeightReference, billboard, 'heightReference', billboardData.heightReference, interval, sourceUri, entityCollection);
         processPacketData(HorizontalOrigin, billboard, 'horizontalOrigin', billboardData.horizontalOrigin, interval, sourceUri, entityCollection);
         processPacketData(Image, billboard, 'image', billboardData.image, interval, sourceUri, entityCollection);
         processPacketData(Cartesian2, billboard, 'pixelOffset', billboardData.pixelOffset, interval, sourceUri, entityCollection);
@@ -1153,6 +1150,7 @@ define([
         processPacketData(Color, label, 'outlineColor', labelData.outlineColor, interval, sourceUri, entityCollection);
         processPacketData(Number, label, 'outlineWidth', labelData.outlineWidth, interval, sourceUri, entityCollection);
         processPacketData(Cartesian3, label, 'eyeOffset', labelData.eyeOffset, interval, sourceUri, entityCollection);
+        processPacketData(HeightReference, label, 'heightReference', labelData.heightReference, interval, sourceUri, entityCollection);
         processPacketData(HorizontalOrigin, label, 'horizontalOrigin', labelData.horizontalOrigin, interval, sourceUri, entityCollection);
         processPacketData(String, label, 'text', labelData.text, interval, sourceUri, entityCollection);
         processPacketData(Cartesian2, label, 'pixelOffset', labelData.pixelOffset, interval, sourceUri, entityCollection);
@@ -1327,8 +1325,6 @@ define([
         processPacketData(Color, polygon, 'outlineColor', polygonData.outlineColor, interval, sourceUri, entityCollection);
         processPacketData(Number, polygon, 'outlineWidth', polygonData.outlineWidth, interval, sourceUri, entityCollection);
         processPacketData(Boolean, polygon, 'perPositionHeight', polygonData.perPositionHeight, interval, sourceUri, entityCollection);
-        processPacketData(Boolean, polygon, 'closeTop', polygonData.closeTop, interval, sourceUri, entityCollection);
-        processPacketData(Boolean, polygon, 'closeBottom', polygonData.closeBottom, interval, sourceUri, entityCollection);
         processPositions(polygon, 'hierarchy', polygonData.positions, entityCollection);
     }
 
